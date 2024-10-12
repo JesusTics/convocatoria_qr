@@ -1,5 +1,4 @@
-// Content.js
-import React from "react";
+import React, { useRef } from "react";
 import Button from "@mui/material/Button";
 
 function Content() {
@@ -8,9 +7,17 @@ function Content() {
     // Agregar lógica de descarga
   };
 
-  const handleUpload = () => {
-    console.log("Cargando archivo...");
-    // Agregar lógica de carga
+  const inputRef = useRef(null);
+
+  const handleUploadClick = () => {
+    // Abrir el selector de archivos
+    inputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    console.log("Archivos seleccionados:", files);
+    // Aquí iría la lógica para subir archivos a Google Drive o OneDrive
   };
 
   return (
@@ -23,10 +30,17 @@ function Content() {
       >
         Descargar Archivos
       </Button>
+      <input
+        ref={inputRef}
+        type="file"
+        multiple
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
       <Button
         variant="contained"
         color="secondary"
-        onClick={handleUpload}
+        onClick={handleUploadClick}
         style={{ margin: "10px" }}
       >
         Cargar Archivos
