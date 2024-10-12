@@ -1,23 +1,19 @@
+import React from "react";
+import Header from "./components/principales/Header";
+import Footer from "./components/principales/Footer";
+import Content from "./components/principales/Content";
 import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      <Header />
+      <div className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> Esta es la prueba.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Content />
+      </div>
+      <Footer />
     </div>
   );
 }
