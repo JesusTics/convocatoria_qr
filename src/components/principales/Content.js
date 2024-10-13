@@ -1,23 +1,50 @@
 import React, { useRef } from "react";
+import { storage } from "../../config/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 import Button from "@mui/material/Button";
 
 function Content() {
-  const handleDownload = () => {
-    console.log("Descargando archivo...");
-    // Agregar lógica de descarga
-  };
-
   const inputRef = useRef(null);
 
-  const handleUploadClick = () => {
-    // Abrir el selector de archivos
-    inputRef.current.click();
+  const handleDownload = () => {
+    console.log("Descargando archivo...");
+    const fileRef = ref(storage, "plantilla/plantilla1.docx");
+    getDownloadURL(fileRef)
+      .then((url) => {
+        // Crear un elemento <a> temporal para descargar el archivo
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "plantilla1"; // El nombre con el que quieres guardar el archivo
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      })
+      .catch((error) => {
+        console.error("Error al descargar archivo:", error);
+      });
   };
 
   const handleFileChange = (event) => {
     const files = event.target.files;
-    console.log("Archivos seleccionados:", files);
-    // Aquí iría la lógica para subir archivos a Google Drive o OneDrive
+    Array.from(files).forEach((file) => uploadFile(file));
+  };
+
+  const uploadFile = (file) => {
+    if (!file) return;
+    const BASE_NAME = "convocatoria_";
+    const fileRef = ref(storage, `archivos/${BASE_NAME + v4()}`);
+    uploadBytes(fileRef, file).then((snapshot) => {
+      alert("Archivo cargado");
+      // Opcional: Obtener y guardar la URL del archivo cargado
+      // getDownloadURL(snapshot.ref).then((url) => {
+      //   setImageUrls((prev) => [...prev, url]);
+      // });
+    });
+  };
+
+  const handleUploadClick = () => {
+    inputRef.current.click();
   };
 
   return (
